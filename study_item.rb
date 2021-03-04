@@ -1,5 +1,6 @@
 class StudyItem
   attr_reader :id, :title, :category
+  attr_accessor :status
 
   @@current_id = 1 #variavel de classe
   @@study_items = []
@@ -8,6 +9,7 @@ class StudyItem
     @id = @@current_id
     @title = title
     @category = category
+    @status = false
 
     @@current_id += 1
     @@study_items << self
@@ -30,13 +32,32 @@ class StudyItem
     new(title: title, category: category)
   end
 
+  def self.change_status
+    StudyItem.view(StudyItem.all)
+    print("\nDigite o id desejado: ")
+    id = gets.chomp.to_i
+    found_item = all.filter do |item|
+      item.id == id
+    end
+    found_item.first.status = !found_item.first.status
+  end
+
   def self.all
     @@study_items
   end
 
-  def self.print(items)
-    puts items
-    puts 'Nenhum item cadastrado' if items.empty?
+  def self.view(items)
+    if items.empty?
+      puts 'Nenhum item cadastrado'
+    else
+      incomplete = all.map { |item| item unless item.status }
+      completed = all.map { |item| item if item.status }
+      puts("Concluidos:")
+      puts completed
+      puts("==========================")
+      puts("Incompletos")
+      puts incomplete
+    end
   end
 
   def self.search
@@ -45,11 +66,11 @@ class StudyItem
     found_items = all.filter do |item|
     item.include?(term)
     end
-    StudyItem.print(found_items)
+    StudyItem.view(found_items)
   end
 
   def self.delete
-    print(all)
+    view(all)
     puts('=========================')
     print 'Digite o id a ser deletado: '
     id = gets.chomp.to_i

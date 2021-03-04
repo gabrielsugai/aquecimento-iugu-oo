@@ -2,9 +2,10 @@ require_relative 'study_item'
 
 REGISTER = 1
 VIEW = 2
-SEARCH = 3
-DELETE = 4
-EXIT = 5
+CHANGE = 3
+SEARCH = 4
+DELETE = 5
+EXIT = 6
 
 def clear
   system('clear')
@@ -28,6 +29,7 @@ end
 def menu
   puts "[#{REGISTER}] Cadastrar um item para estudar"
   puts "[#{VIEW}] Ver todos os itens cadastrados"
+  puts "[#{CHANGE}] Alterar status de um item"
   puts "[#{SEARCH}] Buscar um item de estudo"
   puts "[#{DELETE}] Deletar um item"
   puts "[#{EXIT}] Sair"
@@ -45,7 +47,9 @@ loop do
   when REGISTER
     StudyItem.register
   when VIEW
-    StudyItem.print(StudyItem.all)
+    StudyItem.view(StudyItem.all)
+  when CHANGE
+    StudyItem.change_status
   when SEARCH
     StudyItem.search
   when DELETE
