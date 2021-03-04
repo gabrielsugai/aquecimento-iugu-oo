@@ -3,7 +3,8 @@ require_relative 'study_item'
 REGISTER = 1
 VIEW = 2
 SEARCH = 3
-EXIT = 4
+DELETE = 4
+EXIT = 5
 
 def clear
   system('clear')
@@ -28,6 +29,7 @@ def menu
   puts "[#{REGISTER}] Cadastrar um item para estudar"
   puts "[#{VIEW}] Ver todos os itens cadastrados"
   puts "[#{SEARCH}] Buscar um item de estudo"
+  puts "[#{DELETE}] Deletar um item"
   puts "[#{EXIT}] Sair"
   print 'Escolha uma opção: '
   gets.to_i
@@ -46,6 +48,8 @@ loop do
     StudyItem.print(StudyItem.all)
   when SEARCH
     StudyItem.search
+  when DELETE
+    StudyItem.delete
   when EXIT
     clear
     puts 'Obrigado por usar o Diário de Estudos'

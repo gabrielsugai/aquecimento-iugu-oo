@@ -47,4 +47,12 @@ class StudyItem
     end
     StudyItem.print(found_items)
   end
+
+  def self.delete
+    print(all)
+    puts('=========================')
+    print 'Digite o id a ser deletado: '
+    id = gets.chomp.to_i
+    all.delete_if {|item| item.id == id}
+  end
 end
