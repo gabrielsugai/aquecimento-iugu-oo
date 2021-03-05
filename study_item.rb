@@ -1,3 +1,5 @@
+require 'colorize'
+
 class StudyItem
   attr_reader :id, :title, :category
   attr_accessor :status
@@ -24,22 +26,27 @@ class StudyItem
   end
 
   def self.register
-    print 'Digite o título do seu item de estudo: '
+    print 'Digite o título do seu item de estudo: '.colorize(:yellow)
     title = gets.chomp
-    print 'Digite a categoria do seu item de estudo: '
+    print 'Digite a categoria do seu item de estudo: '.colorize(:yellow)
     category = gets.chomp
     puts "Item '#{title}' da categoria '#{category}' cadastrado com sucesso!"
+          .colorize(:green)
     new(title: title, category: category)
   end
 
   def self.change_status
     StudyItem.view(StudyItem.all)
-    print("\nDigite o id desejado: ")
+    print("\nDigite o id desejado: ".colorize(:yellow))
     id = gets.chomp.to_i
     found_item = all.filter do |item|
       item.id == id
     end
-    found_item.first.status = !found_item.first.status
+    if found_item.any?
+      found_item.first.status = !found_item.first.status
+    else
+      puts "Item invalido, ou não encontrado.".colorize(:red)
+    end
   end
 
   def self.all
@@ -48,20 +55,21 @@ class StudyItem
 
   def self.view(items)
     if items.empty?
-      puts 'Nenhum item cadastrado'
+      puts 'Nenhum item cadastrado'.colorize(:yellow)
     else
       incomplete = all.map { |item| item unless item.status }
       completed = all.map { |item| item if item.status }
-      puts("Concluidos:")
-      puts completed
-      puts("==========================")
-      puts("Incompletos")
-      puts incomplete
+      puts "Incompletos:".colorize(:yellow)
+      incomplete.each { |item| puts item.to_s.colorize(:red) }
+      puts "==========================".colorize(:cyan)
+      puts "Concluidos:".colorize(:yellow)
+      completed.each { |item| puts item.to_s.colorize(:green) }
+
     end
   end
 
   def self.search
-    print 'Digite uma palavra para procurar: '
+    print 'Digite uma palavra para procurar: '.colorize(:yellow)
     term = gets.chomp
     found_items = all.filter do |item|
     item.include?(term)
@@ -71,8 +79,8 @@ class StudyItem
 
   def self.delete
     view(all)
-    puts('=========================')
-    print 'Digite o id a ser deletado: '
+    puts'========================='.colorize(:cyan)
+    print 'Digite o id a ser deletado: '.colorize(:yellow)
     id = gets.chomp.to_i
     all.delete_if {|item| item.id == id}
   end
